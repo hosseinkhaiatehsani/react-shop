@@ -1,0 +1,39 @@
+.directory-item {
+    min-width: 32%;
+    height: 240px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 2px solid #111;
+    margin-bottom: 15px;
+    background-position: center;
+    background-size: cover;
+
+    &.large{
+        height: 380px;
+    }
+
+    .content{
+        padding: 0 25px;
+        height: 90px;
+        border: 1px solid #111;
+        display: flex;
+        align-items: center;
+        flex-direction: column;
+
+        .title{
+            font-size: 20px;
+            font-weight: 700;
+            margin-bottom: 5px;
+        }
+
+        .subtitle{
+            font-weight: 300;
+            font-size: 16px;
+        }
+    }
+
+    &:nth-child(n+4) {
+        width: 49%;
+    }
+}
