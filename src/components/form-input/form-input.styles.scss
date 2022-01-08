@@ -1,0 +1,48 @@
+$black: #111;
+$gray: #ccc;
+
+.group {
+    width: 90%;
+    position: relative;
+    font-size: 18px;
+
+    .custom-input {
+        width: inherit;
+        height: 30px;
+        border: none;
+        border-bottom: 1px solid #111;
+        padding: 10px 15px;
+        font-size: 1em;
+        margin: 20px 0;
+        outline: none;
+        z-index: 10;
+
+        &:focus ~ .custom-label{
+            top: 0;
+            left: 0;
+            font-size: 0.9em;
+            font-weight: 600;
+            color: $black;
+        }
+
+        &:focus ~ .hide {
+            visibility: visible;
+            opacity: 1;
+        }
+    }
+
+    .custom-label {
+        font-size: 1em;
+        position: absolute;
+        top: 32px;
+        left: 15px;
+        pointer-events: none;
+        color: $gray;
+        transition: all 0.2s ease-in-out;
+
+        &.hide {
+            visibility: hidden;
+            opacity: 0;
+        }
+    }
+}
