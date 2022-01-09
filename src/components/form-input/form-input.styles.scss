@@ -2,18 +2,18 @@ $black: #111;
 $gray: #ccc;
 
 .group {
-    width: 90%;
+    width: 100%;
     position: relative;
     font-size: 18px;
 
     .custom-input {
         width: inherit;
-        height: 30px;
+        height: 40px;
         border: none;
         border-bottom: 1px solid #111;
         padding: 10px 15px;
         font-size: 1em;
-        margin: 20px 0;
+        margin: 25px 0;
         outline: none;
         z-index: 10;
 
@@ -34,7 +34,7 @@ $gray: #ccc;
     .custom-label {
         font-size: 1em;
         position: absolute;
-        top: 32px;
+        top: 30px;
         left: 15px;
         pointer-events: none;
         color: $gray;

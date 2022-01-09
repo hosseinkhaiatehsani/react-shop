@@ -10,4 +10,10 @@
     .subtitle {
         font-size: 18px;
     }
+
+    .sign-in-button-container {
+        display: flex;
+        justify-content: space-around;
+        align-items: center;
+    }
 }

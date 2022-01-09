@@ -5,6 +5,9 @@ import CustomButton from '../custom-button/custom-button.component';
 
 import './sign-in.styles.scss';
 
+import { signInWithPopup } from 'firebase/auth';
+import { auth, provider } from '../../firebase/firebase.utils';
+
 class SignIn extends React.Component {
     constructor(props) {
         super(props);
@@ -30,6 +33,10 @@ class SignIn extends React.Component {
         this.setState({ [name]: value });
     }
 
+    signInWithGoogle = () =>{
+        signInWithPopup(auth, provider);
+    }
+
     render() {
         return (
             <div className='sign-in'>
@@ -51,7 +58,10 @@ class SignIn extends React.Component {
                     label={'Password'}
                     value={this.state.password} required />
 
-                    <CustomButton type='submit'>Sign In</CustomButton>
+                    <div className='sign-in-button-container'>
+                        <CustomButton type='submit'>Sign In</CustomButton>
+                        <CustomButton onClick={this.signInWithGoogle} isGoogleBtn >Sign In With Google</CustomButton>
+                    </div>
                 </form>
             </div>
         )
