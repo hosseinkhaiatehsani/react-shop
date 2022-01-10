@@ -4,8 +4,9 @@ import { getAnalytics } from "firebase/analytics";
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
 
-import 'firebase/firestore';
+// import 'firebase/firestore';
 import { getAuth, GoogleAuthProvider } from "firebase/auth";
+import { doc, getFirestore, getDoc, setDoc } from "firebase/firestore";
 
 // Your web app's Firebase configuration
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
@@ -19,9 +20,49 @@ const firebaseConfig = {
   measurementId: "G-6NRYL9ECK8"
 };
 
+
+export const createUserProfileDocument = async (authUser, aditionalData) => {
+  // check if user is signed in with google
+  if(!authUser) return;
+
+  // create a pointer to firestore database
+  const db = getFirestore();
+  // create a ref with pointer , collection name and unique id
+  const docRef = doc(db, "users", authUser.uid);
+  // create a snapshot with ref to check data 
+  const docSnap = await getDoc(docRef);
+
+  // if data is not exist in collection add it to collection
+  if (! docSnap.exists()) {
+    // console.log("Document data:", docSnap.data());
+    const { uid, displayName, email} = authUser;
+    // create an instance of time in epoch
+    const createdAt = Date.now();
+
+    // add doc to collection with specific fileds
+    try{
+      await setDoc(doc(db, "users", uid), {
+        // uid: uid,
+        // displayName: displayName,
+        // email: email,
+        // phoneNumber: phoneNumber,
+        // createdAt: createdAt
+        displayName,
+        email,
+        createdAt,
+        ...aditionalData
+      });
+    } catch (error){
+      console.log('error creating user', error.message)
+    }
+  } 
+
+  return docRef;
+}
+
 // Initialize Firebase
 export const app = initializeApp(firebaseConfig);
-const analytics = getAnalytics(app);
+export const analytics = getAnalytics(app);
 
 // export const auth = app.auth();
 export const provider = new GoogleAuthProvider();

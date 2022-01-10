@@ -7,7 +7,8 @@ import ShopPage from './pages/shop-page/shop-page.component';
 import SignInAndSignUpPage from './pages/sign-in-and-sign-up-page/sign-in-and-sign-up-page.component';
 import Header from './components/header/header.component';
 
-import { auth } from './firebase/firebase.utils'; 
+import { auth, createUserProfileDocument } from './firebase/firebase.utils';
+import { onSnapshot } from 'firebase/firestore';
 
 class App extends React.Component {
   constructor() {
@@ -23,10 +24,27 @@ class App extends React.Component {
   componentDidMount = () =>{
     // onAuthStateChanged is an open subscription
     // and always will be open
-    this.unsubscribeFromAuth = auth.onAuthStateChanged(user => {
-      this.setState({ currentUser: user })
+    this.unsubscribeFromAuth = auth.onAuthStateChanged(async userAuth => {
+      // check to user is not signed out
+      if(userAuth) {
+        const docRef = await createUserProfileDocument(userAuth);
+        // const docSnap = await getDoc(docRef);
 
-      console.log(user);
+        // check for the latest changes of user(onSnapshot) and call setState
+        onSnapshot( docRef, (snapshot) => {
+          this.setState({
+            currentUser: {
+              id: snapshot.id,
+              ...snapshot.data()
+            }
+          })
+        })
+        
+      } else {
+        // if user signed out set the state to null
+        this.setState({ currentUser: userAuth })
+      }
+      
     })
   }
 
