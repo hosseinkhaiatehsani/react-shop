@@ -1,6 +1,8 @@
 import React from 'react';
 import './App.css';
 import { Routes, Route } from 'react-router-dom';
+import { connect } from 'react-redux';
+import { setCurrentUser } from './redux/user/user.actions';
 
 import HomePage from './pages/homepage/homepage.component';
 import ShopPage from './pages/shop-page/shop-page.component';
@@ -11,17 +13,18 @@ import { auth, createUserProfileDocument } from './firebase/firebase.utils';
 import { onSnapshot } from 'firebase/firestore';
 
 class App extends React.Component {
-  constructor() {
-    super();
+  // constructor() {
+  //   super();
 
-    this.state = {
-      currentUser: null
-    }
-  }
+  //   this.state = {
+  //     currentUser: null
+  //   }
+  // }
 
   unsubscribeFromAuth = null;
 
   componentDidMount = () =>{
+    const { setCurrentUser } = this.props;
     // onAuthStateChanged is an open subscription
     // and always will be open
     this.unsubscribeFromAuth = auth.onAuthStateChanged(async userAuth => {
@@ -32,17 +35,15 @@ class App extends React.Component {
 
         // check for the latest changes of user(onSnapshot) and call setState
         onSnapshot( docRef, (snapshot) => {
-          this.setState({
-            currentUser: {
+          setCurrentUser({
               id: snapshot.id,
               ...snapshot.data()
-            }
-          })
+            })
         })
         
       } else {
         // if user signed out set the state to null
-        this.setState({ currentUser: userAuth })
+        setCurrentUser(userAuth)
       }
       
     })
@@ -57,7 +58,7 @@ class App extends React.Component {
   render(){
     return (
       <div >
-        <Header currentUser={this.state.currentUser}/>
+        <Header />
         <Routes>
           <Route exact path='/' element={<HomePage />} />
           <Route path='/shop' element={<ShopPage />} />
@@ -68,4 +69,8 @@ class App extends React.Component {
   }
 }
 
-export default App;
+const mapDispatchToProps = dispatch => ({
+  setCurrentUser: user => dispatch(setCurrentUser(user))
+});
+
+export default connect(null, mapDispatchToProps)(App);
