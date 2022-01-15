@@ -18,3 +18,10 @@ export const addItemToCart = (cartItems, cartItemToAdd) => {
     // with a new property of quantity
     return [...cartItems, { ...cartItemToAdd, quantity: 1 }]
 }
+
+
+export const clearItemFromCart = (cartItems, cartItemToRemove) => {
+    return cartItems.filter( 
+        cartItem =>  cartItem.id != cartItemToRemove.id
+    );
+}
