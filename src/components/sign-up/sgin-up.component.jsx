@@ -24,7 +24,7 @@ class SignUp extends React.Component {
         event.preventDefault();
         const {displayName, email, password, repeatPassword} = this.state;
 
-        if(password != repeatPassword){
+        if(password !== repeatPassword){
             alert('password and repeatPassword is not the same!')
             return;
         }
