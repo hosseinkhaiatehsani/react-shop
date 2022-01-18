@@ -6,7 +6,7 @@ import { getAnalytics } from "firebase/analytics";
 
 // import 'firebase/firestore';
 import { getAuth, GoogleAuthProvider } from "firebase/auth";
-import { doc, getFirestore, getDoc, setDoc } from "firebase/firestore";
+import { doc, getFirestore, getDoc, setDoc, collection, writeBatch } from "firebase/firestore";
 
 // Your web app's Firebase configuration
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
@@ -58,6 +58,18 @@ export const createUserProfileDocument = async (authUser, aditionalData) => {
   } 
 
   return docRef;
+}
+
+export const createCollectionAndDocuments = async (collectionKey, objectToAdd) => {
+  const db = getFirestore();
+  const batch = writeBatch(db);
+
+  objectToAdd.forEach( obj => {
+    let collectionRef = doc(collection(db, collectionKey))
+    batch.set(collectionRef, obj)
+  })
+
+  return await batch.commit()
 }
 
 // Initialize Firebase
