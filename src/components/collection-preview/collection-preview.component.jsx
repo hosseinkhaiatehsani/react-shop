@@ -3,11 +3,15 @@ import React from "react";
 import './collection-preview.styles.scss';
 
 import CollectionItem from "../collection-item/collection-item.component";
+import { useNavigate } from "react-router-dom";
 
-const CollectionPreview = ({ title, items }) => {
+const CollectionPreview = ({ title, routeName, items }) => {
+    const navigate = useNavigate();
     return (
         <div className="collection-preview">
-            <h2 className="title">{ title.toUpperCase() }</h2>
+            <h2 className="title" data-route={routeName} onClick={() => navigate(`${routeName}`)}>
+                <span className="title-text">{ title.toUpperCase() }</span>
+            </h2>
             <div className="collection-items">
                 {
                     items.filter((item , indx) => indx < 4).map( (item) => 
