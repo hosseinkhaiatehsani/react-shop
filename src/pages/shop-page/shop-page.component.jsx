@@ -1,6 +1,7 @@
 import React from "react";
 import { Routes, Route } from "react-router-dom";
-import { getFirestore, collection, onSnapshot } from "firebase/firestore";
+import { getFirestore, collection, getDocs } from "firebase/firestore";
+// import { onSnapshot } from "firebase/firestore";
 import { converCollectionSnapshotToMap } from "../../firebase/firebase.utils";
 import { connect } from "react-redux";
 import { UpdateCollections } from "../../redux/shop/shop.action";
@@ -21,23 +22,24 @@ class ShopPage extends React.Component {
     }
     unsubscribeFromSnapshot = null;
 
-    componentDidMount = () => {
+    componentDidMount = async () => {
         const { updatedCollection } = this.props;
         const db = getFirestore();
         const collectionRef = collection(db, 'collections');
 
-        this.unsubscribeFromSnapshot = onSnapshot(collectionRef, (snapshot) => {
-            const collectionsMap = converCollectionSnapshotToMap(snapshot);
-            updatedCollection(collectionsMap);
-            this.setState({loading: false});
-        })
+        // this.unsubscribeFromSnapshot = onSnapshot(collectionRef, (snapshot) => {
+        //     const collectionsMap = converCollectionSnapshotToMap(snapshot);
+        //     updatedCollection(collectionsMap);
+        //     this.setState({loading: false});
+        // })
 
 
         // another method to get data just need to make function async
         // and import getDocs
-        
-        // const querySnapshot = await getDocs(collectionRef);
-        // converCollectionSnapshotToMap(querySnapshot)
+        const querySnapshot = await getDocs(collectionRef);
+        const collectionsMap = converCollectionSnapshotToMap(querySnapshot);
+        updatedCollection(collectionsMap);
+        this.setState({loading: false});
 
     }
 
